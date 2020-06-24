@@ -122,6 +122,8 @@ function RunMiniGame()
                     PlaySoundFrontend(0, "TUMBLER_PIN_FALL", "SAFE_CRACK_SOUNDSET", true )
                     lastDialRotationAmount = 0
                     _onSpot = true
+                elseif lastDialRotationAmount >= 25 and _onSpot and currentDialNumber ~= _safeCombination[_currentLockNum] then
+                    _onSpot = false
                 end
             end
         elseif incorrectMovement then
@@ -196,8 +198,14 @@ end
 
 function GetCurrentSafeDialNumber(currentDialAngle)
     local number = math.floor(100 * (currentDialAngle / 360))
-    if number > 0 then number = 100 - number end
-
+    if number > 0 then
+        number = 100 - number
+    end
+    if math.abs(number) == 0 then
+        SafeDialRotation = 0
+    elseif math.abs(number) > 100 then
+        SafeDialRotation = 0
+    end
     return math.abs(number)
 end
 
